@@ -1,0 +1,12 @@
+body{font-family:Inter,Arial,sans-serif;background:#f7fafc;color:#0f172a;margin:0;padding:0}
+.hero{background:#0b1220;color:#e6eef8;padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.hero-img{max-width:980px;width:100%;display:block;opacity:0.95;border-radius:8px;margin-bottom:12px}
+.container{max-width:980px;margin:28px auto;padding:16px;background:white;border-radius:8px;box-shadow:0 8px 30px rgba(2,6,23,0.04)}
+form{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+input[type=file]{padding:6px}
+input[type=text]{padding:8px;border:1px solid #e6eef8;border-radius:6px}
+select{padding:8px;border-radius:6px}
+button{padding:8px 12px;border-radius:6px;border:1px solid #e2e8f0;background:white;cursor:pointer}
+.images{width:100%;border-collapse:collapse;margin-top:12px}
+.images th,.images td{padding:10px;border-bottom:1px solid #eef2f7;text-align:left}
+.message{padding:8px;background:#f1f5f9;border-radius:6px;margin-bottom:10px;color:#0f172a}
