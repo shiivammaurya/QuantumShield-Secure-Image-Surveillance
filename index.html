@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quantum Image Deletion — Simple</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <img src="/static/quantum-hero.svg" alt="quantum hero" class="hero-img"/>
+    <h1>Quantum Image Deletion — Simple Demo</h1>
+    <p>Single-file Flask app. Upload an image and see UID + fingerprint. No npm required.</p>
+  </header>
+
+  <main class="container">
+    <form id="uploadForm">
+      <input type="file" id="fileInput" name="file" required />
+      <input type="text" id="mac" placeholder="Device MAC" value="AA:BB:CC:DD:EE:01" />
+      <input type="text" id="ip" placeholder="Device IP" value="192.168.1.10" />
+      <select id="origin"><option value="original">original</option><option value="screenshot">screenshot</option></select>
+      <button type="submit">Upload</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <h2>Registered Images</h2>
+    <table id="imagesTable" class="images">
+      <thead><tr><th>Preview</th><th>UID</th><th>pHash</th><th>Origin</th><th>Device</th><th>Time</th><th>Deleted</th><th>Action</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+<script>
+async function fetchImages(){
+  const res = await fetch('/api/images');
+  const data = await res.json();
+  const tbody = document.querySelector('#imagesTable tbody');
+  tbody.innerHTML='';
+  data.images.forEach(img => {
+    const tr = document.createElement('tr');
+    const preview = img.filename ? `<img src="/uploads/${img.filename}" style="height:48px">` : '';
+    tr.innerHTML = `
+      <td>${preview}</td>
+      <td><code>${img.uid.slice(0,16)}</code></td>
+      <td>${img.phash}</td>
+      <td>${img.origin}</td>
+      <td>${img.mac}<br>${img.ip}</td>
+      <td>${img.ts}</td>
+      <td>${img.deleted ? 'Yes' : 'No'}</td>
+      <td>${img.deleted ? '' : '<button class="delBtn" data-uid="'+img.uid+'">Delete</button>'}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.querySelectorAll('.delBtn').forEach(b=>b.addEventListener('click', async e=>{
+    const uid = e.target.dataset.uid;
+    await fetch('/api/delete/'+uid, {method:'POST'});
+    fetchImages();
+  }));
+}
+
+document.getElementById('uploadForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const f = document.getElementById('fileInput').files[0];
+  if(!f){ alert('choose a file'); return; }
+  const fd = new FormData();
+  fd.append('file', f);
+  fd.append('mac', document.getElementById('mac').value);
+  fd.append('ip', document.getElementById('ip').value);
+  fd.append('origin', document.getElementById('origin').value);
+  document.getElementById('message').textContent = 'Uploading...';
+  try{
+    const res = await fetch('/api/upload', {method:'POST', body: fd});
+    const j = await res.json();
+    document.getElementById('message').textContent = 'Uploaded — UID: '+j.uid;
+    fetchImages();
+  }catch(err){
+    document.getElementById('message').textContent = 'Upload failed: '+err.message;
+  }
+});
+
+window.addEventListener('load', ()=>{ fetchImages(); setInterval(fetchImages, 5000); });
+</script>
+</body>
+</html>
