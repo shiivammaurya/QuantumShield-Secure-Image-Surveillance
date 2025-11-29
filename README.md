@@ -1,4 +1,5 @@
 Quantum-Based Global Image Deletion System ⚛️🖼️
+
 Global, Permanent & Verifiable Image Deletion Using Quantum Search + Binary Fingerprinting
 
 This project implements a patented technology that enables global deletion of digital images, even after they have been shared, edited, screenshotted, or distributed across different platforms. The system assigns each image a Unique Identifier (UID) at creation and uses Quantum Search + Binary Fingerprinting to track and detect all replicas—including modified or AI-generated versions.
@@ -6,6 +7,7 @@ This project implements a patented technology that enables global deletion of di
 Unlike traditional deletion systems that work only inside one app or device, this system enforces irreversible visual blocking at the display-driver level, making the image impossible to open or view anywhere.
 
 🚀 Features
+
 🔍 Quantum-Enhanced Image Detection
 
 Identifies original, modified, screenshot, and AI-generated versions using UID + binary fingerprinting.
